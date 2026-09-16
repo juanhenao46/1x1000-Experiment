@@ -86,10 +86,28 @@ export default function SuccessPage() {
     processPayment()
   }, [processPayment])
 
-  const copyLink = () => {
-    navigator.clipboard.writeText(referralLink)
+  const copyLink = async () => {
     if (posthog) {
       posthog.capture('share_clicked')
+    }
+
+    const shareText = `I just became participant #${participantNumber} in a 90-day experiment to reach 1,000 people. ${window.location.host}/?ref=p${participantNumber}`
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: '1,000 x $1 Experiment',
+          text: shareText,
+          url: referralLink,
+        })
+      } catch (err) {
+        // Fallback to clipboard if share gets cancelled or fails
+        navigator.clipboard.writeText(shareText)
+        alert('Text copied to clipboard!')
+      }
+    } else {
+      navigator.clipboard.writeText(shareText)
+      alert('Text copied to clipboard!')
     }
   }
 
@@ -119,18 +137,18 @@ export default function SuccessPage() {
 
   return (
     <section className="success">
-      <div className="success__number">#{participantNumber}</div>
-      <div className="success__label">You are participant</div>
-      <p className="success__message">
+      <div className="success__label" style={{ fontSize: '1.2rem', marginBottom: '0.5rem', fontWeight: 600 }}>YOU ARE</div>
+      <div className="success__number" style={{ fontSize: '3rem', fontWeight: 'bold', color: 'var(--accent)', marginBottom: '1.5rem' }}>PARTICIPANT #{participantNumber}</div>
+      <p className="success__message" style={{ marginBottom: '2rem' }}>
         You&apos;re now part of the experiment. Thank you for your curiosity.
       </p>
 
-      <div className="success__share-label">Share your referral link</div>
-      <div className="success__link" onClick={copyLink} title="Click to copy">
-        {referralLink}
+      <div className="success__share-label">Share your participation</div>
+      <div className="success__link" onClick={copyLink} title="Click to share">
+        Share this experiment
       </div>
       <p style={{ fontSize: '0.75rem', color: 'var(--fg-dim)', marginTop: '0.5rem' }}>
-        Click to copy
+        Click to share with your network
       </p>
 
       <a href="/" className="cta" style={{ marginTop: '2.5rem', fontSize: '0.85rem' }}>

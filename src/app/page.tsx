@@ -126,7 +126,7 @@ export default function Home() {
           1,000 <span>×</span> $1
         </h1>
         <p className="hero__question">
-          Can the internet help one ordinary person get 1,000 different people to contribute at least $1?
+          Can one person get 1,000 different people to join a social experiment?
         </p>
 
         {/* STATS */}
@@ -154,13 +154,38 @@ export default function Home() {
         </div>
 
         {/* AMOUNT SELECTION */}
-        <div className="amount-section">
-          <div className="amount-options">
-            {amounts.map(a => (
+        <div className="amount-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
+          <div style={{ fontSize: '0.9rem', color: 'var(--fg-dim)' }}>Select your contribution:</div>
+          
+          {/* Default $1 Option */}
+          <button
+            className={`amount-btn ${amount === 100 ? 'amount-btn--active' : ''}`}
+            onClick={() => setAmount(100)}
+            style={{ width: '100%', maxWidth: '300px', padding: '1rem', fontSize: '1.2rem', fontWeight: 'bold' }}
+          >
+            $1
+          </button>
+          
+          {/* Secondary Options */}
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            {[
+              { label: '$2', cents: 200 },
+              { label: '$5', cents: 500 },
+              { label: '$10', cents: 1000 }
+            ].map(a => (
               <button
                 key={a.cents}
-                className={`amount-btn ${amount === a.cents ? 'amount-btn--active' : ''}`}
                 onClick={() => setAmount(a.cents)}
+                style={{
+                  background: 'none',
+                  border: amount === a.cents ? '1px solid var(--accent)' : '1px solid transparent',
+                  color: amount === a.cents ? 'var(--accent)' : 'var(--fg-dim)',
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: '100px',
+                  cursor: 'pointer',
+                  fontSize: '0.85rem',
+                  transition: 'all 0.2s ease'
+                }}
               >
                 {a.label}
               </button>
@@ -188,6 +213,9 @@ export default function Home() {
               This is a public experiment. One person, no audience, no viral fame — 
               just an attempt to see if the internet can connect 1,000 strangers 
               willing to contribute at least $1 each.
+            </p>
+            <p style={{ fontWeight: 600, color: 'var(--fg)' }}>
+              Participating means exactly that: you become one of the 1,000 people taking part in the experiment. You get a participant number, full transparency, and the chance to see if this actually works.
             </p>
             <p>
               This is not a charity. Not a fundraiser. Not a startup. 
@@ -228,9 +256,7 @@ export default function Home() {
             <details className="faq-item" onToggle={(e) => { if ((e.target as HTMLDetailsElement).open && posthog) posthog.capture('faq_expanded', { question: 'What happens with the money?' }) }}>
               <summary>What happens with the money?</summary>
               <div className="faq-item__answer">
-                The person running the experiment keeps it. This is not a donation to a cause — 
-                it&apos;s a micro-contribution to participate in an internet experiment. 
-                Think of it as the price of curiosity.
+                It goes straight to my personal PayPal account. This is not a charity, a purchase, or a startup fundraiser. You&apos;re contributing $1 simply to become part of a public internet experiment. Think of it as the price of curiosity.
               </div>
             </details>
             <details className="faq-item" onToggle={(e) => { if ((e.target as HTMLDetailsElement).open && posthog) posthog.capture('faq_expanded', { question: 'What if I contribute more than $1?' }) }}>
