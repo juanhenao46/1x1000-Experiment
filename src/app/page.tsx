@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { usePostHog } from 'posthog-js/react'
 
 /** Experiment start date — set to DAY 0 when officially launching */
-const EXPERIMENT_START = new Date('2026-10-01T00:00:00Z')
+const EXPERIMENT_START = new Date('2026-09-19T00:00:00Z')
 const EXPERIMENT_DAYS = 90
 const GOAL = 1000
 
